@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eventos de Literatura</title>
+  <meta name="description" content="Agenda de eventos de literatura — feiras, clubes do livro e lançamentos." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E📚%3C/text%3E%3C/svg%3E">
+  <style>
+    /* ============= Variáveis & Reset ============= */
+    :root{
+      --bg: #f8f9fb;
+      --surface:#ffffff;
+      --text:#1d1d21;
+      --muted:#5a5a66;
+      --brand:#7c4dff;
+      --brand-2:#00c2ff;
+      --accent:#31d0aa;
+      --danger:#ff5a5f;
+      --radius:18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --maxw: 1100px;
+    }
+    *,*::before,*::after{ box-sizing:border-box }
+    html{ scroll-behavior:smooth }
+    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, 'Helvetica Neue', Arial, 'Apple Color Emoji','Segoe UI Emoji'; color:var(--text); background:linear-gradient(160deg, var(--bg), #ffffff 55%, #f4f4f4); }
+    img{ max-width:100%; height:auto; display:block }
+    a{ color:inherit }
+    h1,h2,h3{ line-height:1.1; margin:0 0 .5rem }
+    p{ margin:.5rem 0 1rem; color:var(--muted) }
+    .container{ width:min(100% - 2rem, var(--maxw)); margin-inline:auto }
+    .chip{ display:inline-flex; align-items:center; gap:.5rem; padding:.35rem .7rem; border-radius:999px; font-size:.8rem; color:#111; background:linear-gradient(90deg,var(--accent),var(--brand-2)); font-weight:600 }
+    .btn{ display:inline-flex; align-items:center; gap:.6rem; background:linear-gradient(90deg,var(--brand),var(--brand-2)); color:white; border:none; border-radius:12px; padding:.9rem 1.1rem; font-weight:700; letter-spacing:.2px; cursor:pointer; box-shadow:var(--shadow); text-decoration:none }
+    .btn:focus-visible{ outline:3px solid var(--brand-2); outline-offset:2px }
+    .btn.secondary{ background:transparent; border:1px solid #ccc; color:var(--text) }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
+    .skip-link{ position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus{ left:1rem; top:1rem; width:auto; height:auto; background:#000; color:#fff; padding:.6rem .8rem; border-radius:.6rem; z-index:10 }
+
+    /* ============= Header ============= */
+    header{ position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(8px); background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.4)); border-bottom:1px solid rgba(0,0,0,.08) }
+    .nav{ display:flex; align-items:center; justify-content:space-between; padding:.9rem 0 }
+    .brand{ display:flex; gap:.7rem; align-items:center; font-weight:800; letter-spacing:.3px }
+    .brand span{ background:linear-gradient(90deg,var(--brand),var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .logo{ width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:radial-gradient(circle at 30% 30%, var(--brand-2), var(--brand)); box-shadow:var(--shadow) }
+    .menu-toggle{ display:grid; place-items:center; background:transparent; border:1px solid #ccc; color:var(--text); border-radius:12px; padding:.6rem; }
+    nav ul{ list-style:none; margin:0; padding:0; display:flex; gap:1rem }
+    .nav-links{ display:none; position:absolute; left:0; right:0; top:100%; background:var(--surface); border-bottom:1px solid #ccc }
+    .nav-links a{ display:block; padding:1rem 1.25rem; text-decoration:none; color:var(--text) }
+    .nav-links a:hover{ background:#f0f0f0 }
+    .open .nav-links{ display:block }
+
+    /* ============= Hero ============= */
+    .hero{ padding: clamp(2rem, 4vw + 1rem, 5rem) 0 2rem }
+    .hero-inner{ display:grid; gap:1.2rem }
+    .hero h1{ font-size:clamp(1.8rem, 2.6vw + 1.2rem, 3rem) }
+    .hero p{ font-size:clamp(1rem, .6vw + .9rem, 1.2rem) }
+    .cta-row{ display:flex; gap:.8rem; flex-wrap:wrap }
+    .hero-card{ margin-top:1rem; background:#fdfdfd; border:1px solid #ddd; padding:1rem; border-radius:var(--radius) }
+
+    /* ============= Cards de Eventos ============= */
+    section{ padding: clamp(1.5rem, 3vw + 1rem, 3rem) 0 }
+    .grid{ display:grid; gap:1rem }
+    .event-card{ background:var(--surface); border:1px solid #ddd; border-radius:var(--radius); padding:1rem; box-shadow:var(--shadow); display:grid; gap:.6rem }
+    .event-top{ display:flex; align-items:center; justify-content:space-between; gap:.6rem }
+    .date-badge{ background:rgba(124,77,255,.1); color:#4a148c; border:1px solid rgba(124,77,255,.3); padding:.35rem .6rem; border-radius:10px; font-weight:700; letter-spacing:.3px; font-variant-numeric:tabular-nums }
+    .event-meta{ display:flex; gap:.6rem; flex-wrap:wrap; color:var(--muted); font-size:.92rem }
+
+    /* ============= Galeria ============= */
+    .gallery{ display:grid; grid-template-columns:repeat(2,1fr); gap:.6rem }
+    .gallery a{ border-radius:14px; overflow:hidden; border:1px solid #ddd; display:block }
+    .gallery img{ aspect-ratio: 3/2; object-fit:cover; filter:saturate(1.05) contrast(1.05) }
+
+    /* ============= Contato ============= */
+    form{ display:grid; gap:.8rem; background:var(--surface); border:1px solid #ddd; padding:1rem; border-radius:var(--radius); box-shadow:var(--shadow) }
+    label{ font-weight:600 }
+    input, textarea, select{ width:100%; padding:.9rem 1rem; background:#fff; color:var(--text); border:1px solid #ccc; border-radius:12px; font:inherit }
+    input:focus, textarea:focus, select:focus{ outline:3px solid rgba(124,77,255,.35); border-color:transparent }
+    .form-row{ display:grid; gap:.8rem }
+
+    /* ============= Footer ============= */
+    footer{ border-top:1px solid #ddd; color:var(--muted); padding:1.4rem 0 3rem }
+
+    /* ============= Responsividade ============= */
+    @media (min-width: 720px){
+      .nav-links{ display:flex !important; position:static; background:none; border:0 }
+      .menu-toggle{ display:none }
+      .hero-inner{ grid-template-columns: 1.2fr .8fr; align-items:center }
+      .grid{ grid-template-columns: repeat(2,1fr) }
+      .gallery{ grid-template-columns:repeat(4,1fr) }
+      .form-row{ grid-template-columns: 1fr 1fr }
+    }
+    @media (min-width: 1000px){
+      .grid{ grid-template-columns: repeat(3,1fr) }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo principal</a>
+
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primária">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">📚</div>
+        <span>Lit<span aria-hidden="true">Era</span> <span class="sr-only">— Eventos de Literatura</span></span>
+      </div>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav-links" id="btnMenu" title="Abrir menu">
+        ☰ <span class="sr-only">Menu</span>
+      </button>
+      <nav class="nav-links" id="nav-links">
+        <ul>
+          <li><a href="#eventos">Eventos</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <span class="chip" aria-label="Selo de novidades">Novidades 2025</span>
+          <h1>Encontre seu próximo <span style="background:linear-gradient(90deg,var(--brand),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent">evento literário</span></h1>
+          <p>Feiras, clubes do livro, bate‑papos com autores e lançamentos em todo o Brasil. Organize-se e participe!</p>
+          <div class="cta-row">
+            <a class="btn" href="#eventos">Ver eventos</a>
+            <a class="btn secondary" href="#contato">Enviar um evento</a>
+          </div>
+          <div class="hero-card" aria-live="polite">
+            <strong>Próximo destaque:</strong>
+            <p>Bienal do Livro • São Paulo • 10–18 de setembro</p>
+          </div>
+        </div>
+        <picture>
+          <source type="image/avif" srcset="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop" />
+          <img loading="lazy" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop" alt="Pessoas folheando livros em um evento" />
+        </picture>
+      </div>
+    </section>
+
+    <!-- ===== Eventos ===== -->
+    <section id="eventos" aria-labelledby="ttl-eventos">
+      <div class="container">
+        <h2 id="ttl-eventos">Próximos eventos</h2>
+        <p>Seleção curada para os próximos meses.</p>
+        <div class="grid" id="lista-eventos" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ===== Galeria ===== -->
+    <section id="galeria" aria-labelledby="ttl-galeria">
+      <div class="container">
+        <h2 id="ttl-galeria">Galeria</h2>
+        <p>Momentos de eventos recentes enviados pela comunidade.</p>
+        <div class="gallery">
+          <a href="#"><img loading="lazy" src="https://picsum.photos/id/1027/600/400" alt="Pessoa lendo em auditório" /></a>
+          <a href="#"><img loading="lazy" src="https://picsum.photos/id/1005/600/400" alt="Pilhas de livros coloridos" /></a>
+          <a href="#"><img loading="lazy" src="https://picsum.photos/id/1011/600/400" alt="Autor autografando livro" /></a>
+          <a href="#"><img loading="lazy" src="https://picsum.photos/id/1040/600/400" alt="Público em feira literária" /></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contato ===== -->
+    <section id="contato" aria-labelledby="ttl-contato">
+      <div class="container">
+        <h2 id="ttl-contato">Envie seu evento</h2>
+        <p>Preencha o formulário que retornamos em até 48h.</p>
+        <form id="formContato" novalidate>
+          <div class="form-row">
+            <div>
+              <label for="nome">Seu nome</label>
+              <input id="nome" name="nome" required placeholder="Ex.: Ana Nunes" />
+            </div>
+            <div>
+              <label for="email">E‑mail</label>
+              <input id="email" name="email" type="email" required placeholder="voce@email.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="titulo">Título do evento</label>
+              <input id="titulo" name="titulo" required placeholder="Ex.: Clube do Livro — Machado de Assis" />
+            </div>
+            <div>
+              <label for="cidade">Cidade</label>
+              <input id="cidade" name="cidade" required placeholder="Ex.: São Paulo/SP" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="data">Data</label>
+              <input id="data" name="data" type="date" required />
+            </div>
+            <div>
+              <label for="tipo">Tipo</label>
+              <select id="tipo" name="tipo" required>
+                <option value="">Selecione…</option>
+                <option>Clube do Livro</option>
+                <option>Lançamento</option>
+                <option>Feira/Mostra</option>
+                <option>Palestra/Bate‑papo</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="mensagem">Descrição</label>
+            <textarea id="mensagem" name="mensagem" rows="5" placeholder="Conte um pouco sobre o evento…"></textarea>
+          </div>
+          <button class="btn" type="submit">Enviar</button>
+          <p id="msgForm" class="sr-only" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <small>© <span id="ano"></span> LitEra • Projeto acadêmico — feito com HTML, CSS e JS puros.</small>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Menu móvel
+    const header = document.querySelector('header');
+    const btnMenu = document.getElementById('btnMenu');
+    btnMenu?.addEventListener('click', () => {
+      header.classList.toggle('open');
+      const expanded = header.classList.contains('open');
+      btnMenu.setAttribute('aria-expanded', String(expanded));
+    });
+
+    // ===== Dados de exemplo (poderia vir de um JSON futuramente)
+    const eventos = [
+      { titulo:'Clube do Livro — Clara dos Anjos', data:'2025-09-05', cidade:'Rio de Janeiro/RJ', tipo:'Clube do Livro', preco:'Gratuito' },
+      { titulo:'Feira Literária do Nordeste', data:'2025-10-12', cidade:'Recife/PE', tipo:'Feira/Mostra', preco:'A partir de R$ 20' },
+      { titulo:'Lançamento: Poemas do Amanhã', data:'2025-09-28', cidade:'Curitiba/PR', tipo:'Lançamento', preco:'Gratuito' },
+      { titulo:'Bate‑papo com Autores Independentes', data:'2025-11-03', cidade:'Online', tipo:'Palestra/Bate‑papo', preco:'R$ 15' },
+      { titulo:'Bienal do Livro — São Paulo', data:'2025-09-10', cidade:'São Paulo/SP', tipo:'Feira/Mostra', preco:'A partir de R$ 30' },
+      { titulo:'Rodas de Leitura — Literatura Negra', data:'2025-09-22', cidade:'Salvador/BA', tipo:'Clube do Livro', preco:'Gratuito' },
+    ];
+
+    const formatData = (iso) => {
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    }
+
+    const lista = document.getElementById('lista-eventos');
+    const byDate = (a,b) => new Date(a.data) - new Date(b.data);
+
+    eventos.sort(byDate).forEach(e => {
+      const card = document.createElement('article');
+      card.className = 'event-card';
+      card.innerHTML = `
+        <div class="event-top">
+          <span class="date-badge" aria-label="Data do evento">${formatData(e.data)}</span>
+          <span class="event-meta">${e.tipo} • ${e.cidade}</span>
+        </div>
+        <h3>${e.titulo}</h3>
+        <div class="event-meta">💸 ${e.preco}</div>
+        <div>
+          <a class="btn secondary" href="#contato">Quero participar</a>
+        </div>`;
+      lista.appendChild(card);
+    });
+
+    // ===== Formulário (validação simples — client‑side)
+    const form = document.getElementById('formContato');
+    const msg = document.getElementById('msgForm');
+    form?.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      if(!form.checkValidity()){
+        msg.classList.remove('sr-only');
+        msg.style.color = 'var(--danger)';
+        msg.textContent = 'Verifique os campos obrigatórios.';
+        return;
+      }
+      const data = Object.fromEntries(new FormData(form));
+      console.log('Envio (exemplo):', data); // aqui você conectaria com um backend futuramente
+      form.reset();
+      msg.classList.remove('sr-only');
+      msg.style.color = 'var(--accent)';
+      msg.textContent = 'Recebemos seu evento! Retornamos por e‑mail.';
+    });
+
+    // ano no footer
+    document.getElementById('ano').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
